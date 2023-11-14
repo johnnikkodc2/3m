@@ -44,7 +44,7 @@
             position: absolute;
             width: 80px;
             height: 80px;
-            background: url('green-leaf.webp') no-repeat center center/contain;
+            background: url('img/green-leaf.webp') no-repeat center center/contain;
             animation: fall linear forwards;
         }
 
@@ -52,7 +52,7 @@
             position: absolute;
             width: 30px;
             height: 30px;
-            background: url('rain.webp') no-repeat center center/contain;
+            background: url('img/rain.webp') no-repeat center center/contain;
             animation: fall linear forwards, removeAfterFall 5s linear forwards;
         }
 
@@ -60,7 +60,7 @@
             position: absolute;
             width: 100px;
             height: 100px;
-            background: url('seed.png') no-repeat center center/contain;
+            background: url('img/seed.png') no-repeat center center/contain;
             animation: fall linear forwards, seedReachedBottom 4s linear forwards;
         }
 
@@ -68,7 +68,7 @@
             position: absolute;
             width: 300px;
             height: 800px;
-            background: url('tulip.png') no-repeat center bottom/contain;
+            background: url('img/tulip.png') no-repeat center bottom/contain;
             animation: growTulip 2s linear forwards;
             transform-origin: bottom center;
             bottom: 0;
