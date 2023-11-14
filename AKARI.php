@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1;
+        }
+
+        #audio-controls img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        #audio-controls .song-details {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+
+        .leaf {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: url('green-leaf.webp') no-repeat center center/contain;
+            animation: fall linear forwards;
+        }
+
+        .rain {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: url('rain.webp') no-repeat center center/contain;
+            animation: fall linear forwards, removeAfterFall 5s linear forwards;
+        }
+
+        .seed {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: url('seed.png') no-repeat center center/contain;
+            animation: fall linear forwards, seedReachedBottom 4s linear forwards;
+        }
+
+        .tulip {
+            position: absolute;
+            width: 300px;
+            height: 800px;
+            background: url('tulip.png') no-repeat center bottom/contain;
+            animation: growTulip 2s linear forwards;
+            transform-origin: bottom center;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .message {
+            position: absolute;
+            font-size: 24px;
+            color: white;
+            text-align: center;
+            width: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+
+        @keyframes removeAfterFall {
+            to {
+                opacity: 0;
+                transform: translateY(100vh);
+            }
+        }
+
+        @keyframes seedReachedBottom {
+            to {
+                transform: translateY(calc(100vh - 340px));
+            }
+        }
+
+        @keyframes growTulip {
+            to {
+                height: 400px;
+                /* Adjust the height of the tulip */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Audio Controls -->
+    <div id="audio-controls">
+
+        <div class="song-details">
+            <img src="us.jpg" alt="Song Image">
+            <div id="songTitle" style="color:white">My Love Mine All Wine</div>
+            <button onclick="toggleAudio()" id="playPauseBtn">▶️</button>
+            <input type="range" id="volumeControl" value="100" max="100" onchange="adjustVolume()">
+        </div>
+    </div>
+
+    <!-- Add the audio element without autoplay -->
+    <audio id="myAudio">
+        <source src="mine.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        // Function to toggle audio playback
+        function toggleAudio() {
+            var audio = document.getElementById('myAudio');
+            var playPauseBtn = document.getElementById('playPauseBtn');
+
+            if (audio.paused) {
+                audio.play();
+                playPauseBtn.textContent = '⏸️';
+            } else {
+                audio.pause();
+                playPauseBtn.textContent = '▶️';
+            }
+        }
+
+        // Function to adjust volume
+        function adjustVolume() {
+            var audio = document.getElementById('myAudio');
+            var volumeControl = document.getElementById('volumeControl');
+            audio.volume = volumeControl.value / 100;
+        }
+
+        // Create multiple instances of the falling leaves dynamically
+        function createLeaves() {
+            for (let i = 0; i < 20; i++) {
+                const leaf = document.createElement('div');
+                leaf.className = 'leaf';
+                leaf.style.left = `${Math.random() * 100}vw`;
+                leaf.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                document.body.appendChild(leaf);
+            }
+        }
+
+        // Create multiple instances of the falling raindrops dynamically
+        function createRain() {
+            for (let i = 0; i < 50; i++) {
+                const raindrop = document.createElement('div');
+                raindrop.className = 'rain';
+                raindrop.style.left = `${Math.random() * 100}vw`;
+                raindrop.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                document.body.appendChild(raindrop);
+            }
+        }
+
+        // Call the function to create leaves
+        createLeaves();
+
+        // Stop leaves after 5 seconds and remove them
+        setTimeout(() => {
+            const leaves = document.querySelectorAll('.leaf');
+            leaves.forEach(leaf => leaf.style.animation = 'none');
+            setTimeout(() => {
+                leaves.forEach(leaf => leaf.remove());
+
+                // Create seed falling animation
+                const seed = document.createElement('div');
+                seed.className = 'seed';
+                seed.style.left = '50%';
+                seed.style.animationDuration = '4s';
+                document.body.appendChild(seed);
+
+                // Call the function to create raindrops when the seed reaches the bottom
+                setTimeout(() => createRain(), 4000);
+                setTimeout(() => createRain(), 4000);
+
+                // Remove the seed after 2 seconds
+                setTimeout(() => {
+                    seed.style.animation = 'none';
+                    seed.remove();
+
+                    // Create tulip animation
+                    const tulip = document.createElement('div');
+                    tulip.className = 'tulip';
+                    document.body.appendChild(tulip);
+
+                    // Display the message on top of the tulip
+                    const message = document.createElement('div');
+                    message.className = 'message';
+                    message.textContent = 'Happy 3rd anniversary Akari!';
+                    document.body.appendChild(message);
+                }, 8000);
+            }, 0);
+        }, 5000);
+    </script>
+
+</body>
+
+</html>
